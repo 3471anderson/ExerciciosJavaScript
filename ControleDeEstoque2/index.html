@@ -1,88 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Listando Produtos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body>
-        
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
     <div class="container-fluid p-0">
-        <div class="row m-5">
-            <div class="col-md-12 p-4 border border-2 border-secondary rounded-2">
-                <div class="h1">Listando Produtos</div>
-                <hr>
+      <div class="row m-5">
+        <div class="col-md-12 p-4 border border-2 border-secondary rounded-2">
+          <div class="h1">Listando Produtos</div>
+          <hr />
 
-                <div class="row g-2">
-  <div class="col-md">
-    <div class="form-floating">
-      <input type="text" class="form-control" id="itemName" placeholder="item Name" >
-      <label for="itemName">Nome do Item</label>
-    </div>
-  </div>
-
-  <div class="col-md">
-    <div class="form-floating">
-      <input type="number" class="form-control" id="totalQuantity" placeholder="total quantity" >
-      <label for="totalQuantity">Quantidade Total</label>
-    </div>
-  </div>
-
-  <div class="col-md">
-    <div class="form-floating">
-      <input type="number" class="form-control" id="itemPrice" placeholder="total quantity" >
-      <label for="itemPrice">Preço/Quantidade</label>
-    </div>
-  </div>
-
-
-  <div class="col-md">
-    <div class="form-floating">
-      <select class="form-select" id="itemCategory">
-        <option selected disable></option>
-        <option disable>-- Selecione qualquer um--</option>
-        <option value="Laticinios">Laticínios</option>
-        <option value="Produtos">Produtos</option>
-        <option value="Carne">Carne</option>
-        <option value="Limpadores">Limpadores</option>
-        <option value="Outro">Outro</option>
-      </select>
-      <label for="itemCategory">Categoria</label>
-    </div>
-  </div>
-
-  <div class="col-md d-flex">
-    <button class="btn btn-success form-control" onclick="addItems()">Adicionar na loja</button>
-  </div>
-</div>
-
-<div class="row mt-5">
-  <div class="col-md-12">
-    <div class="h1 text-decoration-underline">O total de itens dentro da loja</div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Nu s.</th>
-          <th>Nome do item</th>
-          <th>Quantidade do item</th>
-          <th>Preço do item</th>
-          <th>Categoria</th>
-          <th>Deletar</th>
-        </tr>
-      </thead>
-      <tbody id="itemData"></tbody>
-    </table>
-  </div>
-</div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="itemName"
+                  placeholder="item Name"
+                />
+                <label for="itemName">Nome do Item</label>
+              </div>
             </div>
+
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="totalQuantity"
+                  placeholder="total quantity"
+                  min="0"
+                  step="1"
+                />
+                <label for="totalQuantity">Quantidade Total</label>
+              </div>
+            </div>
+
+            <div class="col-md">
+              <div class="input-group">
+                <div class="form-floating">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="itemPrice"
+                    placeholder="item price"
+                    min="0"
+                    step="0.01"
+                  />
+                  <label for="itemPrice">Preço/Quantidade</label>
+                </div>
+                <select
+                  class="form-select"
+                  id="itemCurrency"
+                  aria-label="Moeda do preço"
+                  style="max-width: 8.5rem"
+                >
+                  <option value="BRL" selected>R$ Real</option>
+                  <option value="USD">US$ Dólar</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md">
+              <div class="form-floating">
+                <select class="form-select" id="itemCategory">
+                  <option selected disable></option>
+                  <option disable>-- Selecione qualquer um--</option>
+                  <option value="Laticinios">Laticínios</option>
+                  <option value="Produtos">Produtos</option>
+                  <option value="Carne">Carne</option>
+                  <option value="Limpadores">Limpadores</option>
+                  <option value="Outro">Outro</option>
+                </select>
+                <label for="itemCategory">Categoria</label>
+              </div>
+            </div>
+
+            <div class="col-md d-flex">
+              <button class="btn btn-success form-control" onclick="addItems()">
+                Adicionar na loja
+              </button>
+            </div>
+          </div>
+
+          <div class="row mt-5">
+            <div class="col-md-12">
+              <div class="h1 text-decoration-underline">
+                O total de itens dentro da loja
+              </div>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Nu s.</th>
+                    <th>Nome do item</th>
+                    <th>Quantidade do item</th>
+                    <th>Preço do item</th>
+                    <th>Categoria</th>
+                    <th>Deletar</th>
+                  </tr>
+                </thead>
+                <tbody id="itemData"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
