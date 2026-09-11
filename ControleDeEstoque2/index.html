@@ -11,12 +11,42 @@
       crossorigin="anonymous"
     />
   </head>
+
   <body>
     <div class="container-fluid p-0">
       <div class="row m-5">
         <div class="col-md-12 p-4 border border-2 border-secondary rounded-2">
           <div class="h1">Listando Produtos</div>
           <hr />
+
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchInput"
+                  placeholder="Pesquisar"
+                  oninput="renderizarTabela()"
+                />
+                <label for="searchInput">Pesquisar por nome, categoria.</label>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+              <select
+                class="form-select"
+                id="searchCategory"
+                onchange="renderizarTabela()"
+              >
+                <option value="">Todas as categorias</option>
+                <option value="Laticinios">Laticínios</option>
+                <option value="Produtos">Produtos</option>
+                <option value="Carnes">Carnes</option>
+                <option value="Limpadores">Limpadores</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </div>
 
           <div class="row g-2">
             <div class="col-md">
@@ -77,7 +107,7 @@
                   <option disable>-- Selecione qualquer um--</option>
                   <option value="Laticinios">Laticínios</option>
                   <option value="Produtos">Produtos</option>
-                  <option value="Carne">Carne</option>
+                  <option value="Carnes">Carnes</option>
                   <option value="Limpadores">Limpadores</option>
                   <option value="Outro">Outro</option>
                 </select>
