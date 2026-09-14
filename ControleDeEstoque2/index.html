@@ -116,9 +116,22 @@
             </div>
 
             <div class="col-md d-flex">
-              <button class="btn btn-success form-control" onclick="addItems()">
-                Adicionar na loja
-              </button>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-success form-control"
+                  id="btnSalvar"
+                  onClick="addItems()"
+                >
+                  Adicionar na loja
+                </button>
+                <button
+                  class="btn btn-outline-secondary d-none"
+                  id="btnCancelar"
+                  onclick="cancelarEdicao()"
+                >
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
 
