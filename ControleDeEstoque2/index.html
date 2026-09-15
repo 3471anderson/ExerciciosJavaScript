@@ -10,6 +10,15 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <style>
+      th[role="button"] {
+        cursor: pointer;
+        user-select: none;
+      }
+      th[role="button"]:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    </style>
   </head>
 
   <body>
@@ -17,6 +26,9 @@
       <div class="row m-5">
         <div class="col-md-12 p-4 border border-2 border-secondary rounded-2">
           <div class="h1">Listando Produtos</div>
+          <button class="btn btn-outline-danger btn-sm" onclick="limparTudo()">
+            Limpar tudo
+          </button>
           <hr />
 
           <div class="row mt-4">
@@ -103,8 +115,8 @@
             <div class="col-md">
               <div class="form-floating">
                 <select class="form-select" id="itemCategory">
-                  <option selected disable></option>
-                  <option disable>-- Selecione qualquer um--</option>
+                  <option selected disabled></option>
+                  <option disabled>-- Selecione qualquer um--</option>
                   <option value="Laticinios">Laticínios</option>
                   <option value="Produtos">Produtos</option>
                   <option value="Carnes">Carnes</option>
@@ -120,7 +132,7 @@
                 <button
                   class="btn btn-success form-control"
                   id="btnSalvar"
-                  onClick="addItems()"
+                  onclick="addItems()"
                 >
                   Adicionar na loja
                 </button>
@@ -143,12 +155,22 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th>Nu s.</th>
-                    <th>Nome do item</th>
-                    <th>Quantidade do item</th>
-                    <th>Preço do item</th>
-                    <th>Categoria</th>
-                    <th>Deletar</th>
+                    <th role="button" onclick="ordenarPorColuna('id')">
+                      Nu s. <span id="seta-id"></span>
+                    </th>
+                    <th role="button" onclick="ordenarPorColuna('nome')">
+                      Nome do item <span id="seta-nome"></span>
+                    </th>
+                    <th role="button" onclick="ordenarPorColuna('quantidade')">
+                      Quantidade do item <span id="seta-quantidade"></span>
+                    </th>
+                    <th role="button" onclick="ordenarPorColuna('preco')">
+                      Preço do item <span id="seta-preco"></span>
+                    </th>
+                    <th role="button" onclick="ordenarPorColuna('categoria')">
+                      Categoria <span id="seta-categoria"></span>
+                    </th>
+                    <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody id="itemData"></tbody>

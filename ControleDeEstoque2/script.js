@@ -1,6 +1,41 @@
 let produtos = [];
 let proximoId = 1;
 let editandoId = null;
+let ordenarPor = null;
+let direcao = "asc";
+
+function salvarProdutos() {
+  localStorage.setItem("produtos", JSON.stringify(produtos));
+  localStorage.setItem("proximoId", proximoId);
+}
+
+function salvarPreferencias() {
+  localStorage.setItem("preferencias", JSON.stringify({ ordenarPor, direcao }));
+}
+
+function carregarTudo() {
+  try {
+    const produtosSalvos = localStorage.getItem("produtos");
+    if (produtosSalvos) produtos = JSON.parse(produtosSalvos);
+  } catch (e) {
+    console.warn("Falha ao carregar produtos, começando do zero.", e);
+    produtos = [];
+  }
+
+  try {
+    const prefsSalvas = localStorage.getItem("preferencias");
+    if (prefsSalvas) {
+      const prefs = JSON.parse(prefsSalvas);
+      ordenarPor = prefs.ordenarPor ?? null;
+      direcao = prefs.direcao ?? "asc";
+    }
+  } catch (e) {
+    console.warn("Falha ao carregar preferencias.", e);
+  }
+
+  const proximoIdSalvo = localStorage.getItem("proximoId");
+  proximoId = proximoIdSalvo ? parseInt(proximoIdSalvo) : 1;
+}
 
 function addItems() {
   const itemName = document.querySelector("#itemName");
@@ -46,18 +81,14 @@ function addItems() {
     itemCategory.value = "";
   }
 
-  itemName.value = "";
-  totalQuantity.value = "";
-  itemPrice.value = "";
-  itemCategory.value = "";
-
+  salvarProdutos();
   renderizarTabela();
 }
 
 function editarItem(id) {
   const produto = produtos.find((p) => p.id === id);
-  editandoId = id;
   if (!produto) return;
+  editandoId = id;
 
   document.querySelector("#itemName").value = produto.nome;
   document.querySelector("#totalQuantity").value = produto.quantidade;
@@ -65,7 +96,6 @@ function editarItem(id) {
   document.querySelector("#itemCurrency").value = produto.moeda;
   document.querySelector("#itemCategory").value = produto.categoria;
 
-  document.querySelector("#itemName").focus();
   document
     .querySelector("#itemName")
     .scrollIntoView({ behavior: "smooth", block: "center" });
@@ -100,6 +130,18 @@ function cancelarEdicao() {
 function deleteItem(id) {
   if (!window.confirm("Tem certeza que quer deletar isso?")) return;
   produtos = produtos.filter((p) => p.id !== id);
+
+  produtos.forEach((p, index) => {
+    p.id = index + 1;
+  });
+
+  proximoId = produtos.length + 1;
+
+  if (editandoId !== null) {
+    cancelarEdicao();
+  }
+
+  salvarProdutos();
   renderizarTabela();
 }
 
@@ -109,6 +151,21 @@ function formatarPreco(valor, moeda) {
     style: "currency",
     currency: moeda,
   }).format(valor);
+}
+
+function atualizarSetas() {
+  const colunas = ["id", "nome", "quantidade", "preco", "categoria"];
+
+  colunas.forEach((col) => {
+    const span = document.querySelector(`#seta-${col}`);
+    if (!span) return;
+
+    if (col === ordenarPor) {
+      span.textContent = direcao === "asc" ? " ▲" : " ▼";
+    } else {
+      span.textContent = "";
+    }
+  });
 }
 
 function renderizarTabela() {
@@ -127,6 +184,27 @@ function renderizarTabela() {
     return bateTexto && bateCategoria;
   });
 
+  if (ordenarPor) {
+    filtrados.sort((a, b) => {
+      const valorA = a[ordenarPor];
+      const valorB = b[ordenarPor];
+
+      let comparacao;
+
+      if (typeof valorA === "number") {
+        comparacao = valorA - valorB;
+      } else {
+        comparacao = String(valorA).localeCompare(String(valorB), "pt-BR", {
+          sensitivity: "base",
+        });
+      }
+
+      return direcao === "asc" ? comparacao : -comparacao;
+    });
+  }
+
+  atualizarSetas();
+
   tbody.innerHTML = "";
 
   if (filtrados.length === 0) {
@@ -138,14 +216,14 @@ function renderizarTabela() {
     return;
   }
 
-  filtrados.forEach((p, index) => {
+  filtrados.forEach((p) => {
     const row = tbody.insertRow();
 
     if (p.id === editandoId) {
       row.classList.add("table-warning");
     }
 
-    row.insertCell(0).textContent = index + 1;
+    row.insertCell(0).textContent = p.id;
     row.insertCell(1).innerHTML = destacar(p.nome, termo);
     row.insertCell(2).textContent = p.quantidade;
     row.insertCell(3).textContent = formatarPreco(p.preco, p.moeda);
@@ -163,7 +241,33 @@ function destacar(texto, termo) {
   return texto.replace(regex, "<mark>$1</mark>");
 }
 
-document.addEventListener("DOMContentLoaded", renderizarTabela);
+function ordenarPorColuna(coluna) {
+  if (ordenarPor === coluna) {
+    direcao = direcao === "asc" ? "desc" : "asc";
+  } else {
+    ordenarPor = coluna;
+    direcao = "asc";
+  }
+
+  salvarPreferencias();
+  renderizarTabela();
+}
+
+function limparTudo() {
+  if (!window.confirm("Isso vai apagar todos os produtos. Tem certeza?"))
+    return;
+  produtos = [];
+  proximoId = 1;
+  ordenarPor = null;
+  direcao = "asc";
+  localStorage.clear();
+  renderizarTabela();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarTudo();
+  renderizarTabela();
+});
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && editandoId !== null) {
